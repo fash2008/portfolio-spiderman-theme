@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FASHPARKER</title>
+<meta name="description" content=>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --red: #e0202f;
+    --blue: #1d3fa8;
+    --night: #0a1030;
+    --deep: #060a1e;
+    --white: #f6f7fb;
+    --muted: #aab3d4;
+    --yellow: #ffd23f;
+    --display: 'Bangers', 'Impact', sans-serif;
+    --body: 'Barlow', system-ui, sans-serif;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    box-sizing: border-box;
+    padding-top: var(--safe-top);
+    padding-bottom: var(--safe-bottom);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 4.5rem;
+  }
+
+  body {
+    font-family: var(--body);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--white);
+    background: var(--deep);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    pointer-events: none;
+    background: var(--deep);
+  }
+
+  #particles {
+    display: none !important;
+  }
+
+  .web {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    opacity: 0.7;
+    background:
+      radial-gradient(circle at center, rgba(255, 210, 63, 0.16) 0 3%, transparent 3.3%),
+      repeating-radial-gradient(circle at center, rgba(255, 255, 255, 0.11) 0 1px, transparent 1px 30px),
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 28px),
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 28px),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.03), transparent 35%, rgba(255, 255, 255, 0.04));
+    mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0.55) 52%, rgba(0, 0, 0, 0.08) 78%, transparent 100%);
+  }
+
+  .web::before,
+  .web::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(45deg, transparent 49.7%, rgba(255, 255, 255, 0.08) 50%, transparent 50.3%),
+      linear-gradient(-45deg, transparent 49.7%, rgba(255, 255, 255, 0.08) 50%, transparent 50.3%);
+    background-size: 100% 100%;
+  }
+
+  .web::after {
+    transform: scale(0.82);
+    opacity: 0.7;
+  }
+
+  a,
+  button,
+  .panel,
+  .btn,
+  .tap,
+  .pad,
+  .drums button,
+  .menu a {
+    cursor: none;
+  }
+
+  .cursor {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--yellow);
+    border-radius: 50%;
+    background: rgba(255, 210, 63, 0.12);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.18s ease, height 0.18s ease, border-color 0.18s ease, background 0.18s ease, opacity 0.18s ease;
+    box-shadow: 0 0 0 4px rgba(255, 210, 63, 0.08), 0 0 16px rgba(255, 210, 63, 0.3);
+  }
+
+  .cursor::after {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 6px;
+    height: 6px;
+    background: var(--red);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .cursor.active {
+    width: 42px;
+    height: 42px;
+    border-color: var(--red);
+    background: rgba(224, 32, 47, 0.14);
+  }
+
+  .cursor.hidden {
+    opacity: 0;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--yellow);
+    outline-offset: 3px;
+  }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 1.4rem;
+  }
+
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    padding-top: var(--safe-top);
+    transition: background 0.3s, border-color 0.3s;
+    border-bottom: 3px solid transparent;
+  }
+
+  .nav.solid {
+    background: rgba(6, 10, 30, 0.93);
+    backdrop-filter: blur(10px);
+    border-color: var(--red);
+  }
+
+  .nav .wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 3.8rem;
+  }
+
+  .logo {
+    font-family: var(--display);
+    font-size: 1.7rem;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+  }
+
+  .logo b {
+    color: var(--red);
+  }
+
+  .menu {
+    display: flex;
+    gap: 1.6rem;
+    list-style: none;
+  }
+
+  .menu a {
+    text-decoration: none;
+    font-weight: 600;
+    color: var(--muted);
+    padding-bottom: 3px;
+    border-bottom: 3px solid transparent;
+    transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .menu a:hover,
+  .menu a:focus-visible {
+    transform: translateY(-2px);
+  }
+
+  .menu a:hover,
+  .menu a.on {
+    color: var(--white);
+    border-color: var(--red);
+  }
+
+  .burger {
+    display: none;
+    background: none;
+    border: 0;
+    color: var(--white);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+
+  .btns {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    justify-content: center;
+  }
+
+  .btn {
+    display: inline-block;
+    font-family: var(--display);
+    font-size: 1.35rem;
+    letter-spacing: 0.06em;
+    padding: 0.5rem 1.6rem;
+    border: 3px solid #000;
+    background: var(--white);
+    color: #000;
+    text-decoration: none;
+    box-shadow: 5px 5px 0 var(--red);
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    text-align: center;
+  }
+
+  .btn:hover {
+    transform: translate(-2px, -2px) scale(1.05) rotate(-1deg);
+    box-shadow: 7px 7px 0 var(--red);
+  }
+
+  .btn {
+    animation: buttonGlow 2.8s ease-in-out infinite alternate;
+  }
+
+  @keyframes buttonGlow {
+    from {
+      filter: drop-shadow(0 0 0 rgba(255, 210, 63, 0));
+    }
+
+    to {
+      filter: drop-shadow(0 0 10px rgba(255, 210, 63, 0.35));
+    }
+  }
+
+  .btn:active {
+    transform: translate(3px, 3px);
+    box-shadow: 2px 2px 0 var(--red);
+  }
+
+  .btn.alt {
+    background: var(--yellow);
+    box-shadow: 5px 5px 0 var(--blue);
+  }
+
+  .btn.wa {
+    background: #25d366;
+    box-shadow: 5px 5px 0 #000;
+  }
+
+  .hero {
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 7rem 0 4rem;
+  }
+
+  .pic {
+    position: relative;
+    width: 190px;
+    height: 190px;
+    margin: 0 auto 2rem;
+  }
+
+  .pic::before {
+    content: "";
+    position: absolute;
+    inset: -14px;
+    border-radius: 50%;
+    border: 3px dashed var(--red);
+    animation: spin 30s linear infinite;
+  }
+
+  .face {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--blue);
+    border: 5px solid var(--white);
+    box-shadow: 7px 7px 0 var(--red);
+    display: grid;
+    place-items: center;
+    font-family: var(--display);
+    font-size: 4rem;
+  }
+
+  .face img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .sticker {
+    position: absolute;
+    right: -70px;
+    top: -6px;
+    font-family: var(--display);
+    font-size: 1.5rem;
+    background: var(--yellow);
+    color: #000;
+    border: 3px solid #000;
+    padding: 0 0.6rem;
+    transform: rotate(10deg);
+    box-shadow: 3px 3px 0 #000;
+    animation: wob 1.8s ease-in-out infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg) scale(1);
+    }
+
+    50% {
+      transform: rotate(180deg) scale(1.04);
+    }
+
+    to {
+      transform: rotate(360deg) scale(1);
+    }
+  }
+
+  @keyframes wob {
+    0%,
+    100% {
+      transform: rotate(10deg) translateY(0) scale(1);
+    }
+
+    50% {
+      transform: rotate(2deg) translateY(-6px) scale(1.12);
+    }
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--red);
+    padding: 0.3rem 1rem;
+    font-weight: 700;
+    transform: rotate(-2deg);
+    box-shadow: 4px 4px 0 #000;
+    letter-spacing: 0.12em;
+    animation: pulseTag 1.7s ease-in-out infinite alternate;
+  }
+
+  @keyframes pulseTag {
+    from {
+      transform: rotate(-2deg) scale(1);
+    }
+
+    to {
+      transform: rotate(-2deg) scale(1.08);
+    }
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: 0.03em;
+    font-size: clamp(3.4rem, 13vw, 8.4rem);
+    text-shadow: 5px 5px 0 var(--red);
+    margin: 1.2rem 0 0.4rem;
+    animation: heroTitle 1.5s ease-out both;
+  }
+
+  @keyframes heroTitle {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.96);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  h1 span {
+    color: var(--yellow);
+    text-shadow: 5px 5px 0 var(--blue);
+  }
+
+  .realname {
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+
+  .sub {
+    margin: 1.2rem auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    justify-content: center;
+  }
+
+  .sub span {
+    font-family: var(--display);
+    letter-spacing: 0.05em;
+    background: var(--yellow);
+    color: #000;
+    border: 3px solid #000;
+    padding: 0 0.8rem;
+    box-shadow: 3px 3px 0 var(--blue);
+    animation: chipFloat 2.4s ease-in-out infinite alternate;
+  }
+
+  .sub span:nth-child(2n) {
+    animation-delay: 0.25s;
+  }
+
+  .sub span:nth-child(3n) {
+    animation-delay: 0.5s;
+  }
+
+  @keyframes chipFloat {
+    from {
+      transform: translateY(0) rotate(-1deg);
+    }
+
+    to {
+      transform: translateY(-4px) rotate(1deg);
+    }
+  }
+
+  .intro {
+    max-width: 40rem;
+    margin: 1.5rem auto 0;
+    color: var(--muted);
+  }
+
+  section {
+    padding: 4.5rem 0;
+  }
+
+  .title {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+    text-shadow: 3px 3px 0 var(--red);
+  }
+
+  .subtitle {
+    color: var(--muted);
+    margin-bottom: 2.2rem;
+  }
+
+  .panel {
+    background: var(--night);
+    border: 4px solid var(--white);
+    box-shadow: 8px 8px 0 #000;
+    padding: 1.8rem;
+    position: relative;
+    animation: cardFloat 7s ease-in-out infinite;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
+    will-change: transform;
+  }
+
+  .panel:nth-child(2n) {
+    animation-delay: 0.6s;
+  }
+
+  .panel::before {
+    content: "";
+    position: absolute;
+    inset: 10px 12px auto auto;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 210, 63, 0.8);
+    box-shadow: 0 0 12px rgba(255, 210, 63, 0.7);
+    animation: blinkDot 2.4s ease-in-out infinite;
+  }
+
+  @keyframes blinkDot {
+    0%,
+    100% {
+      opacity: 0.3;
+      transform: scale(0.8);
+    }
+
+    50% {
+      opacity: 1;
+      transform: scale(1.4);
+    }
+  }
+
+  .about .panel:hover,
+  .about .stat:hover,
+  .skill:hover,
+  .hobby:hover,
+  .panel:hover {
+    transform: scale(1.08) translateY(-8px) rotate(-0.6deg);
+    box-shadow: 12px 12px 0 #000;
+    filter: saturate(1.08);
+  }
+
+  .stat:hover {
+    transform: scale(1.06) translateY(-8px) rotate(1deg);
+  }
+
+  @keyframes cardFloat {
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+      transform: translateY(-6px) rotate(0.5deg);
+    }
+  }
+
+  .about {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .about p + p {
+    margin-top: 1rem;
+  }
+
+  .about strong {
+    color: var(--yellow);
+  }
+
+  .quote {
+    margin-top: 1.6rem;
+    border-left: 5px solid var(--red);
+    padding-left: 1.1rem;
+    font-style: italic;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+  }
+
+  .stat {
+    text-align: center;
+    padding: 1.2rem 0.6rem;
+    border: 4px solid #000;
+    background: var(--red);
+    box-shadow: 5px 5px 0 #000;
+    animation: statBounce 3.4s ease-in-out infinite;
+  }
+
+  .stat:nth-child(2) {
+    background: var(--blue);
+    animation-delay: 0.4s;
+  }
+
+  .stat:nth-child(3) {
+    animation-delay: 0.8s;
+  }
+
+  .stat:nth-child(4) {
+    animation-delay: 1.2s;
+  }
+
+  @keyframes statBounce {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+      transform: translateY(-5px) rotate(1deg);
+    }
+  }
+
+  .stat h3 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 3rem;
+    line-height: 1;
+  }
+
+  .stat p {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .hobbies {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .hobby h3 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 2.1rem;
+    letter-spacing: 0.04em;
+    color: var(--yellow);
+    animation: titlePulse 2.3s ease-in-out infinite alternate;
+  }
+
+  @keyframes titlePulse {
+    from {
+      transform: scale(1);
+      text-shadow: 0 0 0 rgba(255, 210, 63, 0);
+    }
+
+    to {
+      transform: scale(1.03);
+      text-shadow: 0 0 12px rgba(255, 210, 63, 0.35);
+    }
+  }
+
+  .hobby > p {
+    color: var(--muted);
+    margin: 0.4rem 0 1rem;
+  }
+
+  .toy {
+    border-top: 3px dashed var(--blue);
+    padding-top: 1.1rem;
+  }
+
+  .toy .label {
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+
+  .pad {
+    display: grid;
+    place-items: center;
+    text-align: center;
+    min-height: 110px;
+    margin-bottom: 0.8rem;
+    border: 3px solid #000;
+    background: var(--blue);
+    font-family: var(--display);
+    font-size: 1.6rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    user-select: none;
+    width: 100%;
+    color: var(--white);
+  }
+
+  .pad.wait {
+    background: var(--red);
+  }
+
+  .pad.go {
+    background: #1fbf5a;
+    color: #000;
+  }
+
+  .drums {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.7rem;
+  }
+
+  .drums button {
+    font-family: var(--display);
+    font-size: 1.3rem;
+    letter-spacing: 0.05em;
+    padding: 1.2rem 0.3rem;
+    border: 3px solid #000;
+    background: var(--red);
+    color: var(--white);
+    cursor: pointer;
+    box-shadow: 4px 4px 0 #000;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+  }
+
+  .drums button:hover {
+    transform: translateY(-3px) rotate(-1deg);
+    filter: brightness(1.08);
+  }
+
+  .drums button.hit,
+  .drums button:active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0 #000;
+    background: var(--yellow);
+    color: #000;
+  }
+
+  .note {
+    min-height: 1.6rem;
+    font-weight: 600;
+    color: var(--yellow);
+    margin-top: 0.4rem;
+  }
+
+  .skills {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+  }
+
+  .skill h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .skill p {
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+  }
+
+  .progress {
+    height: 16px;
+    border: 3px solid #000;
+    background: var(--deep);
+  }
+
+  .bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--red), var(--yellow));
+    transition: width 1.4s ease-out;
+  }
+
+  .cgrid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 2rem;
+  }
+
+  .item {
+    padding: 0.9rem 0;
+    border-bottom: 2px dashed var(--blue);
+  }
+
+  .item:last-child {
+    border: 0;
+  }
+
+  .item dt {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .item dd {
+    font-weight: 600;
+    font-size: 1.15rem;
+    word-break: break-word;
+  }
+
+  .item a {
+    text-decoration-color: var(--red);
+    text-underline-offset: 4px;
+  }
+
+  form {
+    display: grid;
+    gap: 1rem;
+  }
+
+  label {
+    display: grid;
+    gap: 0.4rem;
+    font-weight: 600;
+  }
+
+  input,
+  textarea {
+    font: inherit;
+    color: var(--white);
+    background: var(--deep);
+    border: 3px solid var(--white);
+    padding: 0.7rem 0.9rem;
+    width: 100%;
+  }
+
+  input:focus,
+  textarea:focus {
+    border-color: var(--yellow);
+    outline: none;
+  }
+
+  textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  form .btns {
+    margin-top: 0.2rem;
+    justify-content: flex-start;
+  }
+
+  .arena {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 2rem;
+    align-items: stretch;
+  }
+
+  .zone {
+    display: grid;
+    place-items: center;
+    min-height: 320px;
+    overflow: hidden;
+    touch-action: manipulation;
+  }
+
+  .tap {
+    width: min(240px, 60vw);
+    aspect-ratio: 1;
+    border: 5px solid #000;
+    border-radius: 50%;
+    background: var(--red);
+    color: var(--white);
+    font-family: var(--display);
+    font-size: 2.4rem;
+    letter-spacing: 0.06em;
+    line-height: 1.1;
+    cursor: pointer;
+    box-shadow: 8px 8px 0 #000;
+    text-shadow: 3px 3px 0 #000;
+    user-select: none;
+    transition: transform 0.08s, box-shadow 0.08s;
+  }
+
+  .tap:active {
+    transform: scale(0.92) translate(4px, 4px);
+    box-shadow: 2px 2px 0 #000;
+  }
+
+  .tap.live {
+    animation: throb 0.45s ease-in-out infinite alternate;
+  }
+
+  @keyframes throb {
+    to {
+      background: #ff4a5a;
+      transform: scale(1.04);
+    }
+  }
+
+  .fx {
+    position: absolute;
+    pointer-events: none;
+    font-family: var(--display);
+    font-size: 1.9rem;
+    color: var(--yellow);
+    text-shadow: 2px 2px 0 #000;
+    white-space: nowrap;
+    animation: up 0.8s ease-out forwards;
+  }
+
+  @keyframes up {
+    from {
+      opacity: 1;
+      transform: translate(-50%, 0) scale(0.6) rotate(var(--r));
+    }
+
+    to {
+      opacity: 0;
+      transform: translate(-50%, -100px) scale(1.5) rotate(var(--r));
+    }
+  }
+
+  .ring {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    margin: -15px;
+    border: 4px solid var(--yellow);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: ring 0.5s ease-out forwards;
+  }
+
+  @keyframes ring {
+    to {
+      transform: scale(6);
+      opacity: 0;
+    }
+  }
+
+  .shake {
+    animation: shake 0.25s;
+  }
+
+  @keyframes shake {
+    25% {
+      transform: translateX(-6px) rotate(-0.6deg);
+    }
+
+    75% {
+      transform: translateX(6px) rotate(0.6deg);
+    }
+  }
+
+  .hud {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .hud > div {
+    border: 3px solid #000;
+    background: var(--blue);
+    padding: 0.5rem;
+    text-align: center;
+    box-shadow: 4px 4px 0 #000;
+  }
+
+  .hud .big {
+    grid-column: 1 / -1;
+    background: var(--red);
+  }
+
+  .hud .wide {
+    grid-column: 1 / -1;
+  }
+
+  .hud b {
+    display: block;
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 2.3rem;
+    line-height: 1.1;
+    color: var(--yellow);
+  }
+
+  .hud .big b {
+    font-size: 3.4rem;
+    color: var(--white);
+    text-shadow: 3px 3px 0 #000;
+  }
+
+  .hud small {
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  .meter {
+    height: 18px;
+    border: 3px solid #000;
+    background: var(--deep);
+    margin: 1.2rem 0 0.6rem;
+  }
+
+  .meter i {
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, var(--red), var(--yellow));
+  }
+
+  .rank {
+    font-family: var(--display);
+    font-size: 1.8rem;
+    color: var(--yellow);
+    min-height: 2.4rem;
+    letter-spacing: 0.04em;
+  }
+
+  .panel.in:hover {
+    transform: translate(-4px, -4px) rotate(-0.5deg);
+    box-shadow: 12px 12px 0 #000;
+  }
+
+  footer {
+    border-top: 3px solid var(--red);
+    padding: 1.8rem 0;
+    text-align: center;
+    color: var(--muted);
+    background: rgba(6, 10, 30, 0.92);
+  }
+
+  footer p + p {
+    font-style: italic;
+    font-size: 0.95rem;
+    margin-top: 0.3rem;
+  }
+
+  .pop {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+
+  .pop.in {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (max-width: 820px) {
+    .about,
+    .hobbies,
+    .cgrid,
+    .arena {
+      grid-template-columns: 1fr;
+    }
+
+    .burger {
+      display: block;
+    }
+
+    .menu {
+      position: fixed;
+      top: calc(3.8rem + var(--safe-top));
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      background: var(--deep);
+      border-bottom: 3px solid var(--red);
+      display: none;
+    }
+
+    .menu.open {
+      display: flex;
+    }
+
+    .menu a {
+      display: block;
+      padding: 1rem 1.4rem;
+      border: 0;
+    }
+
+    .sticker {
+      right: -40px;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .btn {
+      width: 100%;
+    }
+
+    .stats {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    .pic::before,
+    .web,
+    .sticker,
+    .tap.live,
+    .shake {
+      animation: none;
+    }
+
+    .pop {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" aria-hidden="true"></div>
+
+<!-- ========== STRUKTUR HTML ========== -->
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="logo" href="#home">FASH<b>PARKER</b></a>
+    <button class="burger" id="burger" aria-expanded="false" aria-controls="menu">Menu</button>
+    <ul class="menu" id="menu">
+      <li><a href="#home" class="on">HOME</a></li>
+      <li><a href="#about">ABOUT</a></li>
+      <li><a href="#hobi">HOBBY</a></li>
+      <li><a href="#arena">ARENA</a></li>
+      <li><a href="#skill">SKILL</a></li>
+      <li><a href="#contact">CONTACT</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="home">
+    <div class="wrap">
+      <div class="pic">
+        <div class="face">FP<img src="peter parker 1.jpg" alt="Foto Aqila Fasha Ramadhan" onerror="this.remove()"></div>
+        <span class="sticker" aria-hidden="true">THWIP!</span>
+      </div>
+      <p class="tag">MY LITTLE SPACE</p>
+      <h1>Aqila  <span> Fasha Ramadhan</span></h1>
+      <p class="realname"></p>
+      <div class="sub"><span>Playing Video Games</span><span>Toys Collecting</span><span>Movie &amp; Series</span><span>Listen To Music</span></div>
+      <p class="intro">Crafting digital experiences with Peter Parker-like precision and creativity. I build modern, responsive, and user-focused websites that deliver the best possible experience for every visitor.</p>
+      <div class="btns">
+        <a class="btn" href="#about">About me</a>
+        <a class="btn wa" href="https://wa.me/6285777712308" target="_blank" rel="noopener">Chat WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <h2 class="title pop">ABOUT ME</h2>
+      <p class="subtitle pop">Orang di balik setiap baris kode</p>
+      <div class="about">
+        <div class="panel pop">
+          <p>Hai, nama lengkap saya adalah <strong>Aqila Fasha Ramadhan</strong>, Saya seorang vibecoder yang menciptakan website yang menarik dan mudah digunakan oleh semua orang.</p>
+          <p>Dengan kecintaan saya terhadap teknologi, saya mengubah ide menjadi website berkualitas melalui kode yang bersih, desain yang menarik, dan pengalaman pengguna yang nyaman dengan bantuan AI.</p>
+          <p class="quote">“Life can sometimes be messy. Plans may fall apart. You might even stumble. So what? Keep fighting and take the responsibility.”</p>
+        </div>
+        <div class="stats pop">
+          <div class="stat"><h3>70+</h3><p>Proyek selesai</p></div>
+          <div class="stat"><h3>90+</h3><p>Klien puas</p></div>
+          <div class="stat"><h3>15+</h3><p>Secangkir kopi</p></div>
+          <div class="stat"><h3>18+</h3><p>Umur</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="hobi">
+    <div class="wrap">
+      <h2 class="title pop">MY HOBBY</h2>
+      <p class="subtitle pop">Yang bikin saya semangat di luar kode</p>
+      <div class="hobbies">
+        <article class="panel hobby pop">
+          <h3>Gaming</h3>
+          <p>Cara saya melepas penat sekaligus melatih refleks dan strategi.</p>
+          <div class="toy">
+            <div class="label">Tes refleks: tekan saat layar berubah hijau</div>
+            <button class="pad" id="pad" type="button">Tekan untuk mulai</button>
+            <p class="note" id="padNote" aria-live="polite"></p>
+          </div>
+        </article>
+        <article class="panel hobby pop">
+          <h3>Music</h3>
+          <p>Musik menemani saya mengerjakan apa saja, dari santai sampai fokus.</p>
+          <div class="toy">
+            <div class="label">Drum mini (nyalakan suara)</div>
+            <div class="drums"><button type="button" data-s="kick">BUM</button><button type="button" data-s="snare">TAK</button><button type="button" data-s="hat">TIK</button></div>
+          </div>
+        </article>
+        <article class="panel hobby pop">
+          <h3>Figure Collecting</h3>
+          <p>Saya senang mengumpulkan atau mengoleksikan mainan untuk pajangan, seperti Koleksi Action Figure Dari Berbagai Franchise.</p>
+        </article>
+        <article class="panel hobby pop">
+          <h3>Movie/Series</h3>
+          <p>Menonton dan menikmati film dan series, terutama saat waktu luang atau bersama teman-teman dan keluarga.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="arena">
+    <div class="wrap">
+      <h2 class="title pop">Click Arena</h2>
+      <p class="subtitle pop">Klik secepat mungkin selama 10 detik. Klik beruntun menaikkan combo dan skor.</p>
+      <div class="arena">
+        <div class="panel zone pop" id="zone"><button class="tap" id="tap" type="button">KLIK!</button></div>
+        <div class="panel pop">
+          <div class="hud">
+            <div class="big"><b id="pts">0</b><small>Skor</small></div>
+            <div><b id="tLeft">10.0</b><small>Detik</small></div>
+            <div><b id="cnt">0</b><small>Klik</small></div>
+            <div><b id="cps">0.0</b><small>Klik per detik</small></div>
+            <div><b id="mul">x1</b><small>Combo</small></div>
+            <div class="wide"><b id="hi">0</b><small>Rekor tertinggi</small></div>
+          </div>
+          <div class="meter"><i id="tbar"></i></div>
+          <p class="rank" id="rank" aria-live="polite"></p>
+          <button class="btn alt" id="snd" type="button">Suara: mati</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skill">
+    <div class="wrap">
+      <h2 class="title pop">My Skill</h2>
+      <p class="subtitle pop">Kemampuan terbaik yang saya miliki</p>
+      <div class="skills">
+        <article class="panel skill pop"><h3>Pemecahan Masalah Kreatif</h3><p>Mengubah tantangan sulit menjadi solusi yang efektif dan sederhana.</p><div class="progress"><div class="bar" data-value="92"></div></div></article>
+        <article class="panel skill pop"><h3>AI</h3><p>Mengeksplorasi kecerdasan buatan dan teknologi interaktif.</p><div class="progress"><div class="bar" data-value="80"></div></div></article>
+        <article class="panel skill pop"><h3>Desain Responsif</h3><p>Membuat website yang tampil optimal di semua perangkat.</p><div class="progress"><div class="bar" data-value="94"></div></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <h2 class="title pop">Contact me</h2>
+      <p class="subtitle pop">Mari ciptakan sesuatu yang luar biasa</p>
+      <div class="cgrid">
+        <dl class="panel pop">
+          <div class="item"><dt>Email</dt><dd><a href="mailto:aqilafasha330@gmail.com">aqilafasha330@gmail.com</a></dd></div>
+          <div class="item"><dt>WhatsApp</dt><dd><a href="https://wa.me/6285777712308" target="_blank" rel="noopener">0857-7771-2308</a></dd></div>
+          <div class="item"><dt>Lokasi</dt><dd>Indonesia</dd></div>
+        </dl>
+        <form class="panel pop" id="form" novalidate>
+          <label>Nama<input id="fName" autocomplete="name"></label>
+          <label>Pesan<textarea id="fMsg" placeholder="Tulis pesan Anda di sini"></textarea></label>
+          <div class="btns">
+            <button class="btn" type="button" id="mailBtn">Kirim email</button>
+            <button class="btn wa" type="button" id="waBtn">Kirim WhatsApp</button>
+          </div>
+          <p class="note" id="fNote" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 <strong>Aqila Fasha Ramadhan</strong>. Dibuat dengan FASHPARKER</p>
+  </div>
+</footer>
+
+<!-- ========== JAVASCRIPT ========== -->
+<script>
+  (function () {
+    'use strict';
+
+    const EMAIL = 'aqilafasha330@gmail.com';
+    const WA = '6285777712308';
+    const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const $ = (id) => document.getElementById(id);
+
+    const nav = $('nav');
+    const burger = $('burger');
+    const menu = $('menu');
+    const links = [...menu.querySelectorAll('a')];
+    const cursor = document.querySelector('.cursor');
+
+    document.addEventListener('pointermove', (event) => {
+      cursor.style.left = event.clientX + 'px';
+      cursor.style.top = event.clientY + 'px';
+      cursor.classList.remove('hidden');
+    });
+
+    document.addEventListener('pointerdown', () => cursor.classList.add('active'));
+    document.addEventListener('pointerup', () => cursor.classList.remove('active'));
+    document.addEventListener('pointerleave', () => cursor.classList.add('hidden'));
+    document.addEventListener('pointerenter', () => cursor.classList.remove('hidden'));
+
+    document.querySelectorAll('a, button, .panel, .tap, .pad, .drums button').forEach((element) => {
+      element.addEventListener('mouseenter', () => cursor.classList.add('active'));
+      element.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener('click', (event) => {
+        const targetId = anchor.getAttribute('href');
+        if (!targetId || targetId === '#') return;
+
+        const target = document.querySelector(targetId);
+        if (!target) return;
+
+        event.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('solid', window.scrollY > 40);
+    }, { passive: true });
+
+    burger.addEventListener('click', () => {
+      const isOpen = menu.classList.toggle('open');
+      burger.setAttribute('aria-expanded', isOpen);
+    });
+
+    menu.addEventListener('click', (event) => {
+      if (event.target.tagName === 'A') {
+        menu.classList.remove('open');
+        burger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+
+        links.forEach((link) => {
+          const active = link.getAttribute('href') === '#' + entry.target.id;
+          link.classList.toggle('on', active);
+        });
+      });
+    }, {
+      rootMargin: '-45% 0px -50% 0px'
+    });
+
+    document.querySelectorAll('section[id]').forEach((section) => {
+      sectionObserver.observe(section);
+    });
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+
+        entry.target.classList.add('in');
+        entry.target.querySelectorAll('.bar').forEach((bar) => {
+          bar.style.width = bar.dataset.value + '%';
+        });
+
+        revealObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.pop').forEach((element) => {
+      revealObserver.observe(element);
+    });
+
+    const pad = $('pad');
+    const padNote = $('padNote');
+    let reactionState = 'idle';
+    let reactionTimer;
+    let reactionStart = 0;
+    let bestReaction = null;
+
+    const setPadState = (className, text) => {
+      pad.className = ['pad', className].filter(Boolean).join(' ');
+      pad.textContent = text;
+    };
+
+    pad.addEventListener('click', () => {
+      if (reactionState === 'idle') {
+        reactionState = 'wait';
+        setPadState('wait', 'Tunggu hijau…');
+        padNote.textContent = '';
+
+        reactionTimer = setTimeout(() => {
+          reactionState = 'go';
+          reactionStart = performance.now();
+          setPadState('go', 'SEKARANG!');
+        }, 1200 + Math.random() * 2300);
+        return;
+      }
+
+      if (reactionState === 'wait') {
+        clearTimeout(reactionTimer);
+        reactionState = 'idle';
+        setPadState('', 'Terlalu cepat. Tekan untuk coba lagi');
+        return;
+      }
+
+      const ms = Math.round(performance.now() - reactionStart);
+      bestReaction = bestReaction === null ? ms : Math.min(bestReaction, ms);
+      reactionState = 'idle';
+      setPadState('', 'Tekan untuk main lagi');
+      padNote.textContent = 'Refleks: ' + ms + ' ms. Terbaik: ' + bestReaction + ' ms';
+    });
+
+    let audioContext;
+
+    function tone(frequency, endFrequency, duration, type, volume) {
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      const startTime = audioContext.currentTime;
+
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(frequency, startTime);
+      oscillator.frequency.exponentialRampToValueAtTime(endFrequency, startTime + duration);
+
+      gain.gain.setValueAtTime(volume, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+
+      oscillator.connect(gain).connect(audioContext.destination);
+      oscillator.start(startTime);
+      oscillator.stop(startTime + duration);
+    }
+
+    function makeNoise(duration, volume, highPass) {
+      const length = audioContext.sampleRate * duration;
+      const buffer = audioContext.createBuffer(1, length, audioContext.sampleRate);
+      const channelData = buffer.getChannelData(0);
+
+      for (let i = 0; i < length; i += 1) {
+        channelData[i] = Math.random() * 2 - 1;
+      }
+
+      const source = audioContext.createBufferSource();
+      const filter = audioContext.createBiquadFilter();
+      const gain = audioContext.createGain();
+
+      source.buffer = buffer;
+      filter.type = 'highpass';
+      filter.frequency.value = highPass;
+      gain.gain.setValueAtTime(volume, audioContext.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+
+      source.connect(filter).connect(gain).connect(audioContext.destination);
+      source.start();
+    }
+
+    const drumSounds = {
+      kick: () => tone(150, 40, 0.25, 'sine', 0.9),
+      snare: () => {
+        makeNoise(0.18, 0.6, 1200);
+        tone(220, 120, 0.1, 'triangle', 0.3);
+      },
+      hat: () => makeNoise(0.06, 0.35, 7000)
+    };
+
+    document.querySelectorAll('.drums button').forEach((button) => {
+      button.addEventListener('click', () => {
+        try {
+          audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+          drumSounds[button.dataset.s]();
+        } catch (error) {
+          // Ignore audio setup issues in browsers that block it.
+        }
+
+        button.classList.add('hit');
+        setTimeout(() => button.classList.remove('hit'), 90);
+      });
+    });
+
+    const tap = $('tap');
+    const zone = $('zone');
+    const DURATION = 10000;
+    const WORDS = ['POW!', 'BAM!', 'ZAP!', 'THWIP!', 'WHAM!'];
+
+    let arenaState = 'idle';
+    let endTime = 0;
+    let animationFrameId;
+    let clicks = 0;
+    let score = 0;
+    let combo = 0;
+    let lastHit = 0;
+    let hiScore = 0;
+    let audioMuted = true;
+
+    try {
+      hiScore = Number(localStorage.getItem('fp-hi')) || 0;
+    } catch (error) {
+      hiScore = 0;
+    }
+
+    const getMultiplier = () => 1 + Math.min(4, Math.floor(combo / 5));
+
+    function updateHud(timeLeft) {
+      const elapsed = (DURATION - timeLeft) / 1000;
+      $('tLeft').textContent = (timeLeft / 1000).toFixed(1);
+      $('cnt').textContent = clicks;
+      $('pts').textContent = score;
+      $('mul').textContent = 'x' + getMultiplier();
+      $('hi').textContent = hiScore;
+      $('tbar').style.width = (timeLeft / DURATION * 100) + '%';
+      $('cps').textContent = elapsed > 0 ? (clicks / elapsed).toFixed(1) : '0.0';
+    }
+
+    function spawnEffect(text, x, y) {
+      if (prefersReducedMotion) return;
+
+      const floatText = document.createElement('span');
+      floatText.className = 'fx';
+      floatText.textContent = text;
+      floatText.style.left = x + 'px';
+      floatText.style.top = y + 'px';
+      floatText.style.setProperty('--r', (Math.random() * 30 - 15) + 'deg');
+      zone.appendChild(floatText);
+      floatText.addEventListener('animationend', () => floatText.remove());
+
+      const ring = document.createElement('i');
+      ring.className = 'ring';
+      ring.style.left = x + 'px';
+      ring.style.top = y + 'px';
+      zone.appendChild(ring);
+      ring.addEventListener('animationend', () => ring.remove());
+    }
+
+    function arenaLoop() {
+      const timeLeft = Math.max(0, endTime - performance.now());
+      updateHud(timeLeft);
+
+      if (timeLeft <= 0) {
+        finishArena();
+        return;
+      }
+
+      animationFrameId = requestAnimationFrame(arenaLoop);
+    }
+
+    function finishArena() {
+      arenaState = 'locked';
+      tap.classList.remove('live');
+
+      const currentClickRate = clicks / (DURATION / 1000);
+      $('cps').textContent = currentClickRate.toFixed(1);
+
+      const rank = currentClickRate < 4
+        ? 'Peter Pemula'
+        : currentClickRate < 6
+          ? 'Web Swinger'
+          : currentClickRate < 8
+            ? 'Spider Cepat'
+            : 'Spider-Speed';
+
+      const isNewRecord = score > hiScore;
+      if (isNewRecord) {
+        hiScore = score;
+        try {
+          localStorage.setItem('fp-hi', String(hiScore));
+        } catch (error) {
+          // Ignore storage errors.
+        }
+      }
+
+      $('hi').textContent = hiScore;
+      $('rank').textContent = rank + (isNewRecord && score > 0 ? ' · Rekor baru!' : '');
+      tap.textContent = 'SELESAI';
+
+      setTimeout(() => {
+        arenaState = 'done';
+        tap.textContent = 'MAIN LAGI';
+      }, 800);
+    }
+
+    tap.addEventListener('click', (event) => {
+      if (arenaState === 'locked') {
+        return;
+      }
+
+      if (arenaState === 'done') {
+        clicks = 0;
+        score = 0;
+        combo = 0;
+        $('rank').textContent = '';
+        updateHud(DURATION);
+        arenaState = 'idle';
+      }
+
+      if (arenaState === 'idle') {
+        arenaState = 'run';
+        endTime = performance.now() + DURATION;
+        tap.classList.add('live');
+        tap.textContent = 'KLIK!';
+        animationFrameId = requestAnimationFrame(arenaLoop);
+      }
+
+      const now = performance.now();
+      combo = now - lastHit < 450 ? combo + 1 : 1;
+      lastHit = now;
+      clicks += 1;
+
+      const multiplier = getMultiplier();
+      score += 10 * multiplier;
+
+      const zoneRect = zone.getBoundingClientRect();
+      const tapRect = tap.getBoundingClientRect();
+      const x = event.detail ? event.clientX - zoneRect.left : tapRect.left - zoneRect.left + tapRect.width / 2;
+      const y = event.detail ? event.clientY - zoneRect.top : tapRect.top - zoneRect.top + tapRect.height / 2;
+
+      spawnEffect(multiplier > 1 ? '+' + (10 * multiplier) + ' x' + multiplier : WORDS[Math.floor(Math.random() * WORDS.length)], x, y);
+
+      if (combo % 5 === 0 && !prefersReducedMotion) {
+        zone.classList.remove('shake');
+        void zone.offsetWidth;
+        zone.classList.add('shake');
+      }
+
+      if (!audioMuted) {
+        try {
+          audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+          tone(260 + combo * 25, 140, 0.07, 'square', 0.12);
+        } catch (error) {
+          // Ignore audio errors silently.
+        }
+      }
+    });
+
+    $('snd').addEventListener('click', () => {
+      audioMuted = !audioMuted;
+      $('snd').textContent = 'Suara: ' + (audioMuted ? 'mati' : 'nyala');
+    });
+
+    updateHud(DURATION);
+
+    const formName = $('fName');
+    const formMessage = $('fMsg');
+    const formStatus = $('fNote');
+
+    function readFormInput() {
+      const name = formName.value.trim();
+      const message = formMessage.value.trim();
+
+      if (!name || !message) {
+        formStatus.textContent = 'Isi nama dan pesan dulu ya.';
+        return null;
+      }
+
+      return { name, message };
+    }
+
+    $('mailBtn').addEventListener('click', () => {
+      const payload = readFormInput();
+      if (!payload) return;
+
+      window.location.href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent('Pesan dari portofolio: ' + payload.name) + '&body=' + encodeURIComponent(payload.message + '\n\n' + payload.name);
+      formStatus.textContent = 'Membuka aplikasi email Anda. Tekan kirim di sana.';
+    });
+
+    $('waBtn').addEventListener('click', () => {
+      const payload = readFormInput();
+      if (!payload) return;
+
+      window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent('Halo, saya ' + payload.name + '.\n\n' + payload.message), '_blank', 'noopener');
+      formStatus.textContent = 'Membuka WhatsApp dengan pesan Anda.';
+    });
+  })();
+</script>
+</body>
+</html>
